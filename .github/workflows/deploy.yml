@@ -36,6 +36,17 @@ jobs:
       - name: Terraform Plan
         run: terraform plan -out=tfplan
 
+  approval:
+    needs: terraform # Requires the terraform job to complete first
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Manual Approval Step
+      - name: Wait for Manual Approval
+        uses: hmarr/auto-approve-action@v2
+        if: $GITHUB_REF == 'refs/heads/infra`
+
+
       # Step 6: Terraform Apply
       #- name: Terraform Apply
       #  if: github.ref == 'refs/heads/main'
