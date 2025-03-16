@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - infra
-  workflow_dispatch: # Allows manual triggering of workflows
+  workflow_dispatch: # Allows manual triggering for the apply job
 
 jobs:
   plan:
@@ -32,8 +32,8 @@ jobs:
         run: terraform plan -out=tfplan
 
   apply:
-    needs: plan # Depends on the plan job
     runs-on: ubuntu-latest
+    # This job will now only run when triggered manually using workflow_dispatch
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -52,4 +52,3 @@ jobs:
 
       - name: Terraform Apply
         run: terraform apply -auto-approve
-        if: github.event_name == 'workflow_dispatch'
