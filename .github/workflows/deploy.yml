@@ -61,7 +61,10 @@ jobs:
         echo $updated_task_definition > updated-task-definition.json
         aws ecs register-task-definition --cli-input-json file://updated-task-definition.json
     - name: Debug Task Definition
-      run: cat updated-task-definition.json
+      run: |
+        cat updated-task-definition.json
+        echo $IMAGE_TAG
+
 
 
     #- name: Update ECS Service
