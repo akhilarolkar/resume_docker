@@ -4,7 +4,11 @@ on:
   push:
     branches:
       - infra
-  workflow_dispatch: # Allows manual triggering for the apply job
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: 'Type "yes" to confirm you want to apply the changes'
+        required: true
 
 jobs:
   plan:
@@ -33,7 +37,7 @@ jobs:
 
   apply:
     runs-on: ubuntu-latest
-    # This job will now only run when triggered manually using workflow_dispatch
+    if: ${{ github.event.inputs.confirm == 'yes' }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
