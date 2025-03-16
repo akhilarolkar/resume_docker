@@ -27,7 +27,7 @@ jobs:
       id: tag
       run: |
         # Generate the tag using the short commit SHA
-        echo "IMAGE_TAG=$(date +%Y%m%d%H%M%S)-${{ github.sha }}" >> $GITHUB_ENV
+        echo "IMAGE_TAG=$(date +%Y%m%d%H%M%S)" >> $GITHUB_ENV
 
     - name: Build Docker Image
       run: |
