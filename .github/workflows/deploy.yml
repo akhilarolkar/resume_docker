@@ -1,4 +1,4 @@
-name: Terraform Workflow
+name: Terraform Workflow with Confirmation
 
 on:
   push:
@@ -30,9 +30,19 @@ jobs:
       - name: Terraform Plan
         run: terraform plan -out=tfplan
 
-  apply:
-    runs-on: ubuntu-latest
+  # Manual confirmation step
+  approval:
     needs: plan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Await Manual Confirmation
+        run: |
+          echo "Please confirm if you want to proceed with applying the changes."
+          echo "To approve, manually trigger the next job."
+
+  apply:
+    needs: approval # Requires the approval job to finish
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -48,9 +58,6 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
-      
-      - name: Terraform Init
-        run: terraform init
 
       - name: Terraform Apply
-        run: terraform apply
+        run: terraform apply -auto-approve
