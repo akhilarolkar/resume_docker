@@ -5,4 +5,4 @@ FROM nginx:alpine
 COPY index.html /usr/share/nginx/html/
 
 # Copy image.jpg into the same directory
-COPY image.jpg /usr/share/nginx/html/
+COPY image.webp /usr/share/nginx/html/
