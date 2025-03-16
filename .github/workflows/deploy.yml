@@ -55,7 +55,8 @@ jobs:
       run: |
         echo "Fetching current task definition..."
         task_definition=$(aws ecs describe-task-definition --task-definition ${{ secrets.ECS_TASK_DEFINITION }} | jq '.taskDefinition | del(.taskDefinitionArn, .requiresAttributes, .compatibilities, .revision, .status, .registeredAt, .registeredBy)')
-        updated_task_definition=$(echo $task_definition | jq --arg IMAGE_URI "${{ secrets.ECR_REPOSITORY_URI }}:${{ env.IMAGE_TAG }}" '.containerDefinitions[0].image = $IMAGE_URI')
+        updated_task_definition=$(echo $task_definition | jq --arg IMAGE_URI "320060061347.dkr.ecr.eu-north-1.amazonaws.com/resume-docker:${IMAGE_TAG}" '.containerDefinitions[0].image = $IMAGE_URI')
+        echo $updated_task_definition | jq '.containerDefinitions[0].image'
         echo $updated_task_definition > updated-task-definition.json
         aws ecs register-task-definition --cli-input-json file://updated-task-definition.json
 
