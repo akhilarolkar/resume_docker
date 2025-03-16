@@ -30,18 +30,9 @@ jobs:
       - name: Terraform Plan
         run: terraform plan -out=tfplan
 
-  # Manual confirmation step
-  approval:
-    needs: plan
-    runs-on: ubuntu-latest
-    steps:
-      - name: Await Manual Confirmation
-        run: |
-          echo "Please confirm if you want to proceed with applying the changes."
-          echo "To approve, manually trigger the next job."
 
   apply:
-    needs: approval # Requires the approval job to finish
+    needs: plan
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
