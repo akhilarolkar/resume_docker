@@ -23,11 +23,17 @@ jobs:
     - name: Login to Amazon ECR
       uses: aws-actions/amazon-ecr-login@v1
 
+    - name: Generate Dynamic Image Tag
+      id: tag
+      run: |
+        # Generate the tag using the short commit SHA
+        echo "IMAGE_TAG=$(date +%Y%m%d%H%M%S)-${{ github.sha }}" >> $GITHUB_ENV
+
     - name: Build Docker Image
       run: |
-        docker build -t resume-site .
-        docker tag resume-site:latest ${{ secrets.ECR_REPOSITORY_URI }}:latest
+        docker build -t resume-site:${IMAGE_TAG} .
+        docker tag resume-site:${IMAGE_TAG} ${{ secrets.ECR_REPOSITORY_URI }}:${IMAGE_TAG}
 
     - name: Push to Amazon ECR
       run: |
-        docker push ${{ secrets.ECR_REPOSITORY_URI }}:latest
+        docker push ${{ secrets.ECR_REPOSITORY_URI }}:${IMAGE_TAG}
