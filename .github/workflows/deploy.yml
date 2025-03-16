@@ -65,8 +65,10 @@ jobs:
         aws ecs register-task-definition --cli-input-json file://updated-task-definition.json
     - name: Debug Task Definition
       run: |
-        cat updated-task-definition.json
-        echo $IMAGE_TAG
+        - name: Debug Received Image Tag
+  run: |
+    echo "Received IMAGE_TAG in Deploy: ${{ needs.build-and-push.outputs.image_tag }}"
+
 
 
 
